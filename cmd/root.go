@@ -5,12 +5,12 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/rabuu/uni-cli/internal/config"
+	"github.com/rabuu/uni-cli/internal/cfg"
 	"github.com/spf13/cobra"
 )
 
 var configFile string
-var conf config.Config
+var config cfg.Config
 
 var uniDirectory string
 var rootCmd = &cobra.Command{
@@ -31,6 +31,7 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVarP(&uniDirectory, "directory", "d", "", "uni directory (default: ~/uni)")
 
+	rootCmd.AddCommand(courseCmd)
 	rootCmd.AddCommand(infoCmd)
 }
 
@@ -69,5 +70,5 @@ func validation() {
 		os.Exit(1)
 	}
 
-	conf = config.Parse(configFile)
+	config = cfg.ParseConfig(configFile)
 }
