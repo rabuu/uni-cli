@@ -5,10 +5,12 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/rabuu/uni-cli/internal/config"
 	"github.com/spf13/cobra"
 )
 
 var configFile string
+var conf config.Config
 
 var uniDirectory string
 var rootCmd = &cobra.Command{
@@ -66,4 +68,6 @@ func validation() {
 		fmt.Fprintln(os.Stderr, "Error: is directory", configFile)
 		os.Exit(1)
 	}
+
+	conf = config.Parse(configFile)
 }
