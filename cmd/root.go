@@ -44,7 +44,8 @@ func validation() {
 			os.Exit(1)
 		}
 
-		uniDirectory = filepath.Join(home, "uni")
+		// TODO: change this to ~/uni when it's ready
+		uniDirectory = filepath.Join(home, "uni-test")
 	}
 
 	uniDirectoryInfo, err := os.Stat(uniDirectory)
