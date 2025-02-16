@@ -32,6 +32,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&uniDirectory, "directory", "d", "", "uni directory (default: ~/uni)")
 
 	rootCmd.AddCommand(courseCmd)
+	rootCmd.AddCommand(pathCmd)
 	rootCmd.AddCommand(infoCmd)
 }
 
