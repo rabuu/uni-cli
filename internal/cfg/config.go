@@ -10,12 +10,11 @@ import (
 
 type (
 	Config struct {
-		Courses []Course `toml:"course"`
+		Courses map[string]Course `toml:"courses"`
 	}
 
 	Course struct {
-		Name string `toml:"name"`
-		LongName string `toml:"long-name"`
+		FullName string `toml:"full-name"`
 		Group []GroupMember `toml:"member"`
 	}
 
@@ -34,6 +33,10 @@ func ParseConfig(path string) Config {
 		os.Exit(1)
 	}
 
+	if config.Courses == nil {
+		config.Courses = make(map[string]Course)
+	}
+
 	return config
 }
 
@@ -49,23 +52,22 @@ func (config *Config) WriteToFile(path string) {
 }
 
 func (config *Config) ContainsCourse(name string) bool {
-	for i := 0; i < len(config.Courses); i++ {
-		if config.Courses[i].Name == name {
-			return true
-		}
-	}
-
-	return false
+	_, ok := config.Courses[name]
+	return ok
 }
 
 func (config *Config) PrintCourses() {
+	if len(config.Courses) == 0 {
+		fmt.Println("There are no registered courses.")
+		return
+	}
+
 	fmt.Println("Courses:")
-	for i := 0; i < len(config.Courses); i++ {
-		course := config.Courses[i]
-		if course.LongName == "" {
-			fmt.Printf("  %d. %s\n", i + 1, course.Name)
-		} else {
-			fmt.Printf("  %d. %s (%s)\n", i + 1, course.Name, course.LongName)
+	for name, course := range config.Courses {
+		fmt.Printf("  - %s", name)
+		if course.FullName != "" {
+			fmt.Printf(" (%s)", course.FullName)
 		}
+		fmt.Println()
 	}
 }
