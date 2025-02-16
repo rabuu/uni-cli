@@ -11,6 +11,7 @@ var infoCmd = &cobra.Command{
 	Short: "Show information about the uni directory",
 	Args: cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Uni Directory: %s\n", mainConfig.GetString("uni-directory"))
+		fmt.Printf("Uni Directory:      %s\n", uniDirectory)
+		fmt.Printf("Configuration File: %s\n", configFile)
 	},
 }

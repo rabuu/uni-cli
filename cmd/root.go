@@ -2,16 +2,15 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
-var mainConfig = viper.New()
+var configFile string
 
-var mainConfigFile string
+var uniDirectory string
 var rootCmd = &cobra.Command{
 	Use:   "uni",
 	Short: "University workflow tool",
@@ -26,40 +25,45 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(initMainConfig)
+	cobra.OnInitialize(validation)
 
-	rootCmd.PersistentFlags().StringVarP(&mainConfigFile, "config", "c", "", "configuration file (default: ~/.config/uni-cli/uni-cli.toml)")
+	rootCmd.PersistentFlags().StringVarP(&uniDirectory, "directory", "d", "", "uni directory (default: ~/uni)")
 
-	rootCmd.AddCommand(configCmd)
 	rootCmd.AddCommand(infoCmd)
 }
 
-func initMainConfig() {
-	if mainConfigFile != "" {
-		if _, err := os.Stat(mainConfigFile); err == nil {
-			mainConfig.SetConfigFile(mainConfigFile)
-		} else {
-			log.Fatal(err)
+func validation() {
+	if uniDirectory == "" {
+		home, err := os.UserHomeDir()
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "Error:", err)
+			os.Exit(1)
 		}
-	} else {
-		mainConfig.SetConfigName("uni-cli")
-		mainConfig.SetConfigType("toml")
-		mainConfig.AddConfigPath("$HOME/.config/uni-cli/")
-		mainConfig.AddConfigPath("$XDG_CONFIG_HOME/uni-cli/")
-		mainConfig.AddConfigPath(".")
+
+		uniDirectory = filepath.Join(home, "uni")
 	}
 
-	err := mainConfig.ReadInConfig()
+	uniDirectoryInfo, err := os.Stat(uniDirectory)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Fprintln(os.Stderr, "Error:", err)
+		os.Exit(1)
 	}
 
-	uniDirInfo, err := os.Stat(mainConfig.GetString("uni-directory"))
+	if !uniDirectoryInfo.IsDir() {
+		fmt.Fprintln(os.Stderr, "Error: no directory:", uniDirectory)
+		os.Exit(1)
+	}
+
+	configFile = filepath.Join(uniDirectory, "uni-cli.toml")
+
+	configFileInfo, err := os.Stat(configFile)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Fprintln(os.Stderr, "Error:", err)
+		os.Exit(1)
 	}
 
-	if !uniDirInfo.IsDir() {
-		log.Fatal(fmt.Sprintf("no directory: %s", mainConfig.GetString("uni-directory")))
+	if configFileInfo.IsDir() {
+		fmt.Fprintln(os.Stderr, "Error: is directory", configFile)
+		os.Exit(1)
 	}
 }
