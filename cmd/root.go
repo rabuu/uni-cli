@@ -2,18 +2,20 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
-var uniDir string
+var mainConfig = viper.New()
+
+var mainConfigFile string
 var rootCmd = &cobra.Command{
 	Use:   "uni",
 	Short: "University workflow tool",
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(uniDir)
-	},
+	// Run: func(cmd *cobra.Command, args []string) { },
 }
 
 func Execute() {
@@ -24,9 +26,40 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&uniDir, "uni-directory", "d", "", "main uni directory (default is $HOME/uni)")
+	cobra.OnInitialize(initMainConfig)
 
-	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.PersistentFlags().StringVarP(&mainConfigFile, "config", "c", "", "configuration file (default: ~/.config/uni-cli/uni-cli.toml)")
+
+	rootCmd.AddCommand(configCmd)
+	rootCmd.AddCommand(infoCmd)
 }
 
+func initMainConfig() {
+	if mainConfigFile != "" {
+		if _, err := os.Stat(mainConfigFile); err == nil {
+			mainConfig.SetConfigFile(mainConfigFile)
+		} else {
+			log.Fatal(err)
+		}
+	} else {
+		mainConfig.SetConfigName("uni-cli")
+		mainConfig.SetConfigType("toml")
+		mainConfig.AddConfigPath("$HOME/.config/uni-cli/")
+		mainConfig.AddConfigPath("$XDG_CONFIG_HOME/uni-cli/")
+		mainConfig.AddConfigPath(".")
+	}
 
+	err := mainConfig.ReadInConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	uniDirInfo, err := os.Stat(mainConfig.GetString("uni-directory"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if !uniDirInfo.IsDir() {
+		log.Fatal(fmt.Sprintf("no directory: %s", mainConfig.GetString("uni-directory")))
+	}
+}
