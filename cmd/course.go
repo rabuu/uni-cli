@@ -14,6 +14,15 @@ var courseCmd = &cobra.Command{
 	Short: "Manage courses",
 }
 
+var listCoursesCmd = &cobra.Command{
+	Use: "list",
+	Short: "List all courses",
+	Args: cobra.NoArgs,
+	Run: func(cmd *cobra.Command, args []string) {
+		config.PrintCourses()
+	},
+}
+
 var newLongName string
 var addCourseCmd = &cobra.Command{
 	Use: "add",
@@ -51,5 +60,6 @@ var addCourseCmd = &cobra.Command{
 func init() {
 	addCourseCmd.Flags().StringVarP(&newLongName, "long-name", "l", "", "provide a more detailed name")
 
+	courseCmd.AddCommand(listCoursesCmd)
 	courseCmd.AddCommand(addCourseCmd)
 }
