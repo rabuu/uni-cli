@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var materialFlag bool
 var pathCmd = &cobra.Command{
 	Use: "path",
 	Short: "Get paths of uni directory and its courses",
@@ -21,6 +22,18 @@ var pathCmd = &cobra.Command{
 		course := args[0]
 		if config.ContainsCourse(course) {
 			path := filepath.Join(uniDirectory, course)
+
+			if materialFlag {
+				materialDir := filepath.Join(path, "material")
+				materialDirInfo, err := os.Stat(materialDir)
+				if err != nil || !materialDirInfo.IsDir() {
+					fmt.Fprintf(os.Stderr, "Error: There is no material directory in course %s.", course)
+					os.Exit(1)
+				}
+				fmt.Println(materialDir)
+				return
+			}
+
 			fmt.Println(path)
 			return
 		}
@@ -28,4 +41,8 @@ var pathCmd = &cobra.Command{
 		fmt.Fprintf(os.Stderr, "Error: There is no course %s.", course)
 		os.Exit(1)
 	},
+}
+
+func init() {
+	pathCmd.Flags().BoolVarP(&materialFlag, "material", "m", false, "material directory")
 }
