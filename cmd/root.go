@@ -34,6 +34,7 @@ func init() {
 	rootCmd.AddCommand(courseCmd)
 	rootCmd.AddCommand(pathCmd)
 	rootCmd.AddCommand(infoCmd)
+	rootCmd.AddCommand(nextCmd)
 }
 
 func validation() {

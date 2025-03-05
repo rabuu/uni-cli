@@ -15,6 +15,7 @@ type (
 
 	Course struct {
 		FullName string `toml:"full-name"`
+		Prefix string `toml:"prefix"`
 		Group []GroupMember `toml:"member"`
 	}
 
