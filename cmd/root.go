@@ -16,7 +16,6 @@ var uniDirectory string
 var rootCmd = &cobra.Command{
 	Use:   "uni",
 	Short: "University workflow tool",
-	// Run: func(cmd *cobra.Command, args []string) { },
 }
 
 func Execute() {
@@ -45,8 +44,7 @@ func validation() {
 			os.Exit(1)
 		}
 
-		// TODO: change this to ~/uni when it's ready
-		uniDirectory = filepath.Join(home, "uni-test")
+		uniDirectory = filepath.Join(home, "uni")
 	}
 
 	uniDirectoryInfo, err := os.Stat(uniDirectory)
