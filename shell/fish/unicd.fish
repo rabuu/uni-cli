@@ -1,4 +1,4 @@
-function unigo
+function unicd
 	set dir "$(uni path $argv)"
 	if test -n "$dir"
 		cd $dir
