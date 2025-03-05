@@ -24,6 +24,7 @@ var listCoursesCmd = &cobra.Command{
 }
 
 var newFullName string
+var newPrefix string
 var addCourseCmd = &cobra.Command{
 	Use: "add",
 	Short: "Add a course",
@@ -31,10 +32,13 @@ var addCourseCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		name := args[0]
 
-		var course cfg.Course
-		if newFullName != "" {
-			course.FullName = newFullName
+		if newFullName == "" {
+			newFullName = name
 		}
+
+		var course cfg.Course
+		course.FullName = newFullName
+		course.Prefix = newPrefix
 
 		if config.ContainsCourse(name) {
 			fmt.Printf("The course %s already exists.\n", name)
@@ -86,7 +90,8 @@ var removeCourseCmd = &cobra.Command{
 }
 
 func init() {
-	addCourseCmd.Flags().StringVarP(&newFullName, "full-name", "f", "", "provide a more detailed name")
+	addCourseCmd.Flags().StringVarP(&newFullName, "full-name", "f", "", "the full course name")
+	addCourseCmd.Flags().StringVarP(&newPrefix, "prefix", "p", "woche", "the prefix of the working directories")
 	removeCourseCmd.Flags().BoolVarP(&deleteRemovedCourse, "delete", "D", false, "delete course directory")
 
 	courseCmd.AddCommand(listCoursesCmd)
