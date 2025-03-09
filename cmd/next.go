@@ -116,7 +116,7 @@ func getCurrentCourse() string {
 }
 
 func testNextDir(prefix string, course string) int {
-	for i := 0; i <= 99; i++ {
+	for i := 1; i <= 99; i++ {
 		testDir := fmt.Sprintf("%s%02d", prefix, i)
 		testDirPath := filepath.Join(uniDirectory, course, testDir)
 
