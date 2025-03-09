@@ -50,10 +50,7 @@ var addCourseCmd = &cobra.Command{
 
 		newCourseDirectory := filepath.Join(uniDirectory, name)
 		err := os.MkdirAll(newCourseDirectory, 0755)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, "Error:", err)
-			os.Exit(1)
-		}
+		internal.ExitWithErr(err)
 
 		fmt.Printf("Success: Added course %s.\n", name)
 	},
@@ -79,10 +76,7 @@ var removeCourseCmd = &cobra.Command{
 		if deleteRemovedCourse {
 			courseDirectory := filepath.Join(uniDirectory, name)
 			err := os.RemoveAll(courseDirectory)
-			if err != nil {
-				fmt.Fprintln(os.Stderr, "Error:", err)
-				os.Exit(1)
-			}
+			internal.ExitWithErr(err)
 		}
 
 		fmt.Printf("Success: Removed course %s.\n", name)

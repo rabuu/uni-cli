@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 
@@ -40,36 +39,25 @@ func init() {
 func validation() {
 	if uniDirectory == "" {
 		home, err := os.UserHomeDir()
-		if err != nil {
-			fmt.Fprintln(os.Stderr, "Error:", err)
-			os.Exit(1)
-		}
+		internal.ExitWithErr(err)
 
 		uniDirectory = filepath.Join(home, "uni")
 	}
 
 	uniDirectoryInfo, err := os.Stat(uniDirectory)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error:", err)
-		os.Exit(1)
-	}
+	internal.ExitWithErr(err)
 
 	if !uniDirectoryInfo.IsDir() {
-		fmt.Fprintln(os.Stderr, "Error: no directory:", uniDirectory)
-		os.Exit(1)
+		internal.ExitWithMsg("Error: no directory:", uniDirectory)
 	}
 
 	configFile = filepath.Join(uniDirectory, "uni-cli.toml")
 
 	configFileInfo, err := os.Stat(configFile)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error:", err)
-		os.Exit(1)
-	}
+	internal.ExitWithErr(err)
 
 	if configFileInfo.IsDir() {
-		fmt.Fprintln(os.Stderr, "Error: is directory", configFile)
-		os.Exit(1)
+		internal.ExitWithMsg("Error: is directory", configFile)
 	}
 
 	config = internal.ParseConfig(configFile)

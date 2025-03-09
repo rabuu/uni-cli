@@ -24,17 +24,11 @@ var nextCmd = &cobra.Command{
 		nextDir := fmt.Sprintf("%s%02d", prefix, number)
 
 		err := os.Mkdir(nextDir, 0755)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, "Error:", err)
-			os.Exit(1)
-		}
+		internal.ExitWithErr(err)
 
 		templateDirPath := getTemplateDirPath(course)
 		filepath.WalkDir(templateDirPath, func(path string, d fs.DirEntry, err error) error {
-			if err != nil {
-				fmt.Fprintln(os.Stderr, "Error:", err)
-				os.Exit(1)
-			}
+			internal.ExitWithErr(err)
 
 			if d.IsDir() {
 				stripped := strings.TrimPrefix(path, filepath.Join(uniDirectory, course, "template"))
@@ -44,10 +38,7 @@ var nextCmd = &cobra.Command{
 
 				target := filepath.Join(uniDirectory, course, nextDir, stripped)
 				err := os.Mkdir(target, 0755)
-				if err != nil {
-					fmt.Fprintln(os.Stderr, "Error:", err)
-					os.Exit(1)
-				}
+				internal.ExitWithErr(err)
 			}
 
 			if !d.Type().IsRegular() {
@@ -55,10 +46,7 @@ var nextCmd = &cobra.Command{
 			}
 
 			templ, err := template.ParseFiles(path)
-			if err != nil {
-				fmt.Fprintln(os.Stderr, "ParseError:", err)
-				os.Exit(1)
-			}
+			internal.ExitWithErr(err)
 
 			stripped := strings.TrimPrefix(path, filepath.Join(uniDirectory, course, "template"))
 			target := filepath.Join(uniDirectory, course, nextDir, stripped)
@@ -77,16 +65,10 @@ var nextCmd = &cobra.Command{
 			}
 
 			file, err := os.Create(target)
-			if err != nil {
-				fmt.Fprintln(os.Stderr, "Error:", err)
-				os.Exit(1)
-			}
+			internal.ExitWithErr(err)
 
 			err = templ.Execute(file, data)
-			if err != nil {
-				fmt.Fprintln(os.Stderr, "Error:", err)
-				os.Exit(1)
-			}
+			internal.ExitWithErr(err)
 
 			return nil
 		})
@@ -95,21 +77,16 @@ var nextCmd = &cobra.Command{
 
 func getCurrentCourse() string {
 	cwd, err := os.Getwd()
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error:", err)
-		os.Exit(1)
-	}
+	internal.ExitWithErr(err)
 
 	dir := filepath.Dir(cwd)
 	if dir != uniDirectory {
-		fmt.Fprintln(os.Stderr, "You must be in a course directory")
-		os.Exit(1)
+		internal.ExitWithMsg("You must be in a course directory")
 	}
 
 	course := filepath.Base(cwd)
 	if !config.ContainsCourse(course) {
-		fmt.Fprintln(os.Stderr, "You must be in a course directory")
-		os.Exit(1)
+		internal.ExitWithMsg("You must be in a course directory")
 	}
 
 	return course
@@ -135,14 +112,10 @@ func testNextDir(prefix string, course string) int {
 func getTemplateDirPath(course string) string {
 	templateDirPath := filepath.Join(uniDirectory, course, "template")
 	templateDirInfo, err := os.Stat(templateDirPath)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error:", err)
-		os.Exit(1)
-	}
+	internal.ExitWithErr(err)
 
 	if !templateDirInfo.IsDir() {
-		fmt.Fprintln(os.Stderr, "There is no template directory")
-		os.Exit(1)
+		internal.ExitWithMsg("There is no template directory")
 	}
 
 	return templateDirPath
