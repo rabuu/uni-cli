@@ -52,6 +52,14 @@ func (config *Config) WriteToFile(path string) {
 	os.WriteFile(path, buf.Bytes(), 0644)
 }
 
+func (config *Config) PrintToStdout() {
+	err := toml.NewEncoder(os.Stdout).Encode(config)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "Error:", err)
+		os.Exit(1)
+	}
+}
+
 func (config *Config) ContainsCourse(name string) bool {
 	_, ok := config.Courses[name]
 	return ok

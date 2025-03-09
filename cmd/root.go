@@ -34,7 +34,7 @@ func init() {
 	rootCmd.AddCommand(pathCmd)
 	rootCmd.AddCommand(infoCmd)
 	rootCmd.AddCommand(nextCmd)
-	rootCmd.AddCommand(rewriteCmd)
+	rootCmd.AddCommand(configCmd)
 }
 
 func validation() {
