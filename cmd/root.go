@@ -5,12 +5,12 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/rabuu/uni-cli/internal/cfg"
+	"github.com/rabuu/uni-cli/internal"
 	"github.com/spf13/cobra"
 )
 
 var configFile string
-var config cfg.Config
+var config internal.Config
 
 var uniDirectory string
 var rootCmd = &cobra.Command{
@@ -71,5 +71,5 @@ func validation() {
 		os.Exit(1)
 	}
 
-	config = cfg.ParseConfig(configFile)
+	config = internal.ParseConfig(configFile)
 }

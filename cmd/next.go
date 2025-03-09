@@ -8,7 +8,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/rabuu/uni-cli/internal/cfg"
+	"github.com/rabuu/uni-cli/internal"
 	"github.com/spf13/cobra"
 )
 
@@ -67,7 +67,7 @@ var nextCmd = &cobra.Command{
 				Course, CourseName string
 				Number int
 				NumberPadded string
-				Group []cfg.GroupMember
+				Group []internal.GroupMember
 			}{
 				Course: course,
 				CourseName: config.Courses[course].FullName,

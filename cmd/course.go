@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/rabuu/uni-cli/internal/cfg"
+	"github.com/rabuu/uni-cli/internal"
 	"github.com/spf13/cobra"
 )
 
@@ -36,7 +36,7 @@ var addCourseCmd = &cobra.Command{
 			newFullName = name
 		}
 
-		var course cfg.Course
+		var course internal.Course
 		course.FullName = newFullName
 		course.Prefix = newPrefix
 
