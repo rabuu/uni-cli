@@ -11,7 +11,7 @@ import (
 
 var courseCmd = &cobra.Command{
 	Use: "course",
-	Short: "Manage courses",
+	Short: "Manage the registered courses",
 }
 
 var listCoursesCmd = &cobra.Command{
