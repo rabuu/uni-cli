@@ -66,11 +66,13 @@ var nextCmd = &cobra.Command{
 			data := struct {
 				Course, CourseName string
 				Number int
+				NumberPadded string
 				Group []cfg.GroupMember
 			}{
 				Course: course,
 				CourseName: config.Courses[course].FullName,
 				Number: number,
+				NumberPadded: fmt.Sprintf("%02d", number),
 				Group: config.Courses[course].Group,
 			}
 
