@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/BurntSushi/toml"
+	"github.com/rabuu/uni-cli/internal/exit"
 )
 
 type (
@@ -35,10 +36,7 @@ type (
 func ParseConfig(path string) Config {
 	var config Config
 	_, err := toml.DecodeFile(path, &config)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error:", err)
-		os.Exit(1)
-	}
+	exit.ExitWithErr(err)
 
 	if config.Courses == nil {
 		config.Courses = make(map[string]Course)
@@ -50,20 +48,14 @@ func ParseConfig(path string) Config {
 func (config *Config) WriteToFile(path string) {
 	var buf bytes.Buffer
 	err := toml.NewEncoder(&buf).Encode(config)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error:", err)
-		os.Exit(1)
-	}
+	exit.ExitWithErr(err)
 
 	os.WriteFile(path, buf.Bytes(), 0644)
 }
 
 func (config *Config) PrintToStdout() {
 	err := toml.NewEncoder(os.Stdout).Encode(config)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error:", err)
-		os.Exit(1)
-	}
+	exit.ExitWithErr(err)
 }
 
 func (config *Config) ContainsCourse(name string) bool {
