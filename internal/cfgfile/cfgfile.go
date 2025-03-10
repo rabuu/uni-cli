@@ -17,7 +17,7 @@ type (
 		FullName string `toml:"full-name"`
 		Prefix string `toml:"prefix"`
 		Export []Export `toml:"export"`
-		Group []GroupMember `toml:"member"`
+		Group []GroupMember `toml:"members"`
 	}
 
 	Export struct {
