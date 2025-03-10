@@ -12,6 +12,7 @@ import (
 
 var courseCmd = &cobra.Command{
 	Use: "course",
+	Aliases: []string{"c"},
 	Short: "Manage the registered courses",
 }
 

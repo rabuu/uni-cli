@@ -16,6 +16,7 @@ import (
 
 var nextCmd = &cobra.Command{
 	Use: "next",
+	Aliases: []string{"n"},
 	Short: "Generate next working directory",
 	Args: cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
