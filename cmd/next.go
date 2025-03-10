@@ -75,6 +75,8 @@ var nextCmd = &cobra.Command{
 
 			return nil
 		})
+
+		fmt.Printf("Success: Added working directory %s.\n", nextDir)
 	},
 }
 
