@@ -8,9 +8,9 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/rabuu/uni-cli/internal/cfgfile"
 	"github.com/rabuu/uni-cli/internal/cwd"
 	"github.com/rabuu/uni-cli/internal/exit"
+	"github.com/rabuu/uni-cli/internal/templdata"
 	"github.com/spf13/cobra"
 )
 
@@ -54,22 +54,10 @@ var nextCmd = &cobra.Command{
 			stripped := strings.TrimPrefix(path, filepath.Join(uniDirectory, course, "template"))
 			target := filepath.Join(uniDirectory, course, nextDir, stripped)
 
-			data := struct {
-				Course, CourseName string
-				Number int
-				NumberPadded string
-				Group []cfgfile.GroupMember
-			}{
-				Course: course,
-				CourseName: config.Courses[course].FullName,
-				Number: number,
-				NumberPadded: fmt.Sprintf("%02d", number),
-				Group: config.Courses[course].Group,
-			}
-
 			file, err := os.Create(target)
 			exit.ExitWithErr(err)
 
+			data := templdata.New(&config, course, number)
 			err = templ.Execute(file, data)
 			exit.ExitWithErr(err)
 
