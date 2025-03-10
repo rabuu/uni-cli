@@ -41,7 +41,7 @@ var pathCmd = &cobra.Command{
 				materialDir := filepath.Join(path, "material")
 				materialDirInfo, err := os.Stat(materialDir)
 				if err != nil || !materialDirInfo.IsDir() {
-					fmt.Fprintf(os.Stderr, "Error: There is no material directory in course %s.", course)
+					fmt.Fprintf(os.Stderr, "Error: There is no material directory in course %s.\n", course)
 					os.Exit(1)
 				}
 				fmt.Println(materialDir)
@@ -52,7 +52,7 @@ var pathCmd = &cobra.Command{
 			return
 		}
 
-		fmt.Fprintf(os.Stderr, "Error: There is no course %s.", course)
+		fmt.Fprintf(os.Stderr, "Error: There is no course %s.\n", course)
 		os.Exit(1)
 	},
 }
