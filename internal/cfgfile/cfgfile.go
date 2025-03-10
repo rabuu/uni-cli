@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/BurntSushi/toml"
 	"github.com/rabuu/uni-cli/internal/exit"
@@ -11,6 +12,7 @@ import (
 
 type (
 	Config struct {
+		ExportDir string `toml:"export_directory"`
 		Courses map[string]Course `toml:"courses"`
 	}
 
@@ -33,10 +35,28 @@ type (
 	}
 )
 
-func ParseConfig(path string) Config {
+func ParseConfig(path string, uniDirectory string) Config {
 	var config Config
 	_, err := toml.DecodeFile(path, &config)
 	exit.ExitWithErr(err)
+
+	// validate export directory
+	if config.ExportDir == "" {
+		exit.ExitWithMsg("No export directory is specified.")
+	}
+	exportDirPath := filepath.Join(uniDirectory, config.ExportDir)
+	exportDirInfo, err := os.Stat(exportDirPath)
+	if os.IsNotExist(err) {
+		err := os.Mkdir(exportDirPath, 0755)
+		exit.ExitWithErr(err)
+		exportDirInfo, err = os.Stat(exportDirPath)
+		exit.ExitWithErr(err)
+	} else {
+		exit.ExitWithErr(err)
+	}
+	if !exportDirInfo.IsDir() {
+		exit.ExitWithMsg("Specified export directory is no directory.")
+	}
 
 	if config.Courses == nil {
 		config.Courses = make(map[string]Course)

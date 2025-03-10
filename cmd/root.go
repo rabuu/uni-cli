@@ -12,6 +12,8 @@ import (
 var configFile string
 var config cfgfile.Config
 
+var exportDirectory string
+
 var uniDirectory string
 var rootCmd = &cobra.Command{
 	Use:   "uni",
@@ -35,6 +37,7 @@ func init() {
 	rootCmd.AddCommand(infoCmd)
 	rootCmd.AddCommand(nextCmd)
 	rootCmd.AddCommand(configCmd)
+	rootCmd.AddCommand(exportCmd)
 }
 
 func validation() {
@@ -61,5 +64,6 @@ func validation() {
 		exit.ExitWithMsg("Error: is directory", configFile)
 	}
 
-	config = cfgfile.ParseConfig(configFile)
+	config = cfgfile.ParseConfig(configFile, uniDirectory)
+	exportDirectory = filepath.Join(uniDirectory, config.ExportDir)
 }

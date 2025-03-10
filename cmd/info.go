@@ -13,6 +13,7 @@ var infoCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("Uni Directory:      %s\n", uniDirectory)
 		fmt.Printf("Configuration File: %s\n", configFile)
+		fmt.Printf("Export Directory:   %s\n", exportDirectory)
 		fmt.Println("-----------------------------------------------------")
 		config.PrintCourses()
 	},
