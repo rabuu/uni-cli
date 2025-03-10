@@ -14,12 +14,21 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var cleanFlag bool
 var exportCmd = &cobra.Command{
 	Use: "export",
 	Aliases: []string{"x"},
 	Short: "Export output from working directory",
 	Args: cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
+		if cleanFlag {
+			err := os.RemoveAll(exportDirectory)
+			exit.ExitWithErr(err)
+			err = os.Mkdir(exportDirectory, 0755)
+			exit.ExitWithErr(err)
+			return
+		}
+
 		courseName, number := cwd.WorkingDir(uniDirectory, &config)
 		course := config.Courses[courseName]
 
@@ -56,4 +65,8 @@ var exportCmd = &cobra.Command{
 			fmt.Printf("Exported %s to %s.\n", export.Filename, outFile)
 		}
 	},
+}
+
+func init() {
+	exportCmd.Flags().BoolVarP(&cleanFlag, "clean", "c", false, "clean the export directory")
 }
