@@ -4,12 +4,13 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/rabuu/uni-cli/internal"
+	"github.com/rabuu/uni-cli/internal/cfgfile"
+	"github.com/rabuu/uni-cli/internal/exit"
 	"github.com/spf13/cobra"
 )
 
 var configFile string
-var config internal.Config
+var config cfgfile.Config
 
 var uniDirectory string
 var rootCmd = &cobra.Command{
@@ -39,26 +40,26 @@ func init() {
 func validation() {
 	if uniDirectory == "" {
 		home, err := os.UserHomeDir()
-		internal.ExitWithErr(err)
+		exit.ExitWithErr(err)
 
 		uniDirectory = filepath.Join(home, "uni")
 	}
 
 	uniDirectoryInfo, err := os.Stat(uniDirectory)
-	internal.ExitWithErr(err)
+	exit.ExitWithErr(err)
 
 	if !uniDirectoryInfo.IsDir() {
-		internal.ExitWithMsg("Error: no directory:", uniDirectory)
+		exit.ExitWithMsg("Error: no directory:", uniDirectory)
 	}
 
 	configFile = filepath.Join(uniDirectory, "uni-cli.toml")
 
 	configFileInfo, err := os.Stat(configFile)
-	internal.ExitWithErr(err)
+	exit.ExitWithErr(err)
 
 	if configFileInfo.IsDir() {
-		internal.ExitWithMsg("Error: is directory", configFile)
+		exit.ExitWithMsg("Error: is directory", configFile)
 	}
 
-	config = internal.ParseConfig(configFile)
+	config = cfgfile.ParseConfig(configFile)
 }

@@ -8,7 +8,9 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/rabuu/uni-cli/internal"
+	"github.com/rabuu/uni-cli/internal/cfgfile"
+	"github.com/rabuu/uni-cli/internal/cwd"
+	"github.com/rabuu/uni-cli/internal/exit"
 	"github.com/spf13/cobra"
 )
 
@@ -17,18 +19,18 @@ var nextCmd = &cobra.Command{
 	Short: "Generate next working directory",
 	Args: cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
-		course := getCurrentCourse()
+		course := cwd.CourseDir(uniDirectory, &config)
 
 		prefix := config.Courses[course].Prefix
 		number := testNextDir(prefix, course)
 		nextDir := fmt.Sprintf("%s%02d", prefix, number)
 
 		err := os.Mkdir(nextDir, 0755)
-		internal.ExitWithErr(err)
+		exit.ExitWithErr(err)
 
 		templateDirPath := getTemplateDirPath(course)
 		filepath.WalkDir(templateDirPath, func(path string, d fs.DirEntry, err error) error {
-			internal.ExitWithErr(err)
+			exit.ExitWithErr(err)
 
 			if d.IsDir() {
 				stripped := strings.TrimPrefix(path, filepath.Join(uniDirectory, course, "template"))
@@ -38,7 +40,7 @@ var nextCmd = &cobra.Command{
 
 				target := filepath.Join(uniDirectory, course, nextDir, stripped)
 				err := os.Mkdir(target, 0755)
-				internal.ExitWithErr(err)
+				exit.ExitWithErr(err)
 			}
 
 			if !d.Type().IsRegular() {
@@ -46,7 +48,7 @@ var nextCmd = &cobra.Command{
 			}
 
 			templ, err := template.ParseFiles(path)
-			internal.ExitWithErr(err)
+			exit.ExitWithErr(err)
 
 			stripped := strings.TrimPrefix(path, filepath.Join(uniDirectory, course, "template"))
 			target := filepath.Join(uniDirectory, course, nextDir, stripped)
@@ -55,7 +57,7 @@ var nextCmd = &cobra.Command{
 				Course, CourseName string
 				Number int
 				NumberPadded string
-				Group []internal.GroupMember
+				Group []cfgfile.GroupMember
 			}{
 				Course: course,
 				CourseName: config.Courses[course].FullName,
@@ -65,31 +67,14 @@ var nextCmd = &cobra.Command{
 			}
 
 			file, err := os.Create(target)
-			internal.ExitWithErr(err)
+			exit.ExitWithErr(err)
 
 			err = templ.Execute(file, data)
-			internal.ExitWithErr(err)
+			exit.ExitWithErr(err)
 
 			return nil
 		})
 	},
-}
-
-func getCurrentCourse() string {
-	cwd, err := os.Getwd()
-	internal.ExitWithErr(err)
-
-	dir := filepath.Dir(cwd)
-	if dir != uniDirectory {
-		internal.ExitWithMsg("You must be in a course directory")
-	}
-
-	course := filepath.Base(cwd)
-	if !config.ContainsCourse(course) {
-		internal.ExitWithMsg("You must be in a course directory")
-	}
-
-	return course
 }
 
 func testNextDir(prefix string, course string) int {
@@ -112,10 +97,10 @@ func testNextDir(prefix string, course string) int {
 func getTemplateDirPath(course string) string {
 	templateDirPath := filepath.Join(uniDirectory, course, "template")
 	templateDirInfo, err := os.Stat(templateDirPath)
-	internal.ExitWithErr(err)
+	exit.ExitWithErr(err)
 
 	if !templateDirInfo.IsDir() {
-		internal.ExitWithMsg("There is no template directory")
+		exit.ExitWithMsg("There is no template directory")
 	}
 
 	return templateDirPath

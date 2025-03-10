@@ -5,7 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/rabuu/uni-cli/internal"
+	"github.com/rabuu/uni-cli/internal/cfgfile"
+	"github.com/rabuu/uni-cli/internal/exit"
 	"github.com/spf13/cobra"
 )
 
@@ -36,7 +37,7 @@ var addCourseCmd = &cobra.Command{
 			newFullName = name
 		}
 
-		var course internal.Course
+		var course cfgfile.Course
 		course.FullName = newFullName
 		course.Prefix = newPrefix
 
@@ -50,7 +51,7 @@ var addCourseCmd = &cobra.Command{
 
 		newCourseDirectory := filepath.Join(uniDirectory, name)
 		err := os.MkdirAll(newCourseDirectory, 0755)
-		internal.ExitWithErr(err)
+		exit.ExitWithErr(err)
 
 		fmt.Printf("Success: Added course %s.\n", name)
 	},
@@ -76,7 +77,7 @@ var removeCourseCmd = &cobra.Command{
 		if deleteRemovedCourse {
 			courseDirectory := filepath.Join(uniDirectory, name)
 			err := os.RemoveAll(courseDirectory)
-			internal.ExitWithErr(err)
+			exit.ExitWithErr(err)
 		}
 
 		fmt.Printf("Success: Removed course %s.\n", name)
