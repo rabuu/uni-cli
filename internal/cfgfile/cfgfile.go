@@ -16,7 +16,13 @@ type (
 	Course struct {
 		FullName string `toml:"full-name"`
 		Prefix string `toml:"prefix"`
+		Export []Export `toml:"export"`
 		Group []GroupMember `toml:"member"`
+	}
+
+	Export struct {
+		Filename string `toml:"filename"`
+		Output string `toml:"output"`
 	}
 
 	GroupMember struct {
