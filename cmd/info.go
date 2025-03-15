@@ -15,6 +15,6 @@ var infoCmd = &cobra.Command{
 		fmt.Printf("Configuration File: %s\n", configFile)
 		fmt.Printf("Export Directory:   %s\n", exportDirectory)
 		fmt.Println("-----------------------------------------------------")
-		config.PrintCourses()
+		config.PrintCoursesHumanReadable()
 	},
 }

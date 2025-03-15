@@ -83,7 +83,7 @@ func (config *Config) ContainsCourse(name string) bool {
 	return ok
 }
 
-func (config *Config) PrintCourses() {
+func (config *Config) PrintCoursesHumanReadable() {
 	if len(config.Courses) == 0 {
 		fmt.Println("There are no registered courses.")
 		return
@@ -94,6 +94,16 @@ func (config *Config) PrintCourses() {
 		fmt.Printf("  - %s", name)
 		if course.FullName != "" {
 			fmt.Printf(" (%s)", course.FullName)
+		}
+		fmt.Println()
+	}
+}
+
+func (config *Config) PrintCoursesFishCompletion() {
+	for name, course := range config.Courses {
+		fmt.Print(name)
+		if course.FullName != "" {
+			fmt.Printf("\t%s", course.FullName)
 		}
 		fmt.Println()
 	}

@@ -16,12 +16,17 @@ var courseCmd = &cobra.Command{
 	Short: "Manage the registered courses",
 }
 
+var fishFlag bool
 var listCoursesCmd = &cobra.Command{
 	Use: "list",
 	Short: "List all courses",
 	Args: cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		config.PrintCourses()
+		if fishFlag {
+			config.PrintCoursesFishCompletion()
+		} else {
+			config.PrintCoursesHumanReadable()
+		}
 	},
 }
 
@@ -86,6 +91,7 @@ var removeCourseCmd = &cobra.Command{
 }
 
 func init() {
+	listCoursesCmd.Flags().BoolVar(&fishFlag, "fish", false, "fish completion syntax")
 	addCourseCmd.Flags().StringVarP(&newFullName, "full-name", "f", "", "the full course name")
 	addCourseCmd.Flags().StringVarP(&newPrefix, "prefix", "p", "woche", "the prefix of the working directories")
 	removeCourseCmd.Flags().BoolVarP(&deleteRemovedCourse, "delete", "D", false, "delete course directory")
