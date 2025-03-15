@@ -1,0 +1,1 @@
+uni completion fish | source
