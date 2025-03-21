@@ -21,6 +21,7 @@ type (
 		Prefix string `toml:"prefix,omitempty"`
 		Export []Export `toml:"export"`
 		Members []GroupMember `toml:"members"`
+		Link string `toml:"link,omitempty"`
 	}
 
 	Export struct {
