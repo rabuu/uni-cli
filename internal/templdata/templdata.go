@@ -11,7 +11,7 @@ type TemplateData struct {
 	Course, CourseName string
 	Number int
 	NumberPadded string
-	Group []cfgfile.GroupMember
+	Members []cfgfile.GroupMember
 }
 
 func New(config *cfgfile.Config, courseName string, number int) TemplateData {
@@ -24,7 +24,7 @@ func New(config *cfgfile.Config, courseName string, number int) TemplateData {
 		CourseName: config.Courses[courseName].FullName,
 		Number: number,
 		NumberPadded: fmt.Sprintf("%02d", number),
-		Group: config.Courses[courseName].Group,
+		Members: config.Courses[courseName].Members,
 	}
 
 	return data
