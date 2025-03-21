@@ -18,7 +18,7 @@ type (
 
 	Course struct {
 		FullName string `toml:"full-name"`
-		Prefix string `toml:"prefix"`
+		Prefix string `toml:"prefix,omitempty"`
 		Export []Export `toml:"export"`
 		Members []GroupMember `toml:"members"`
 	}
