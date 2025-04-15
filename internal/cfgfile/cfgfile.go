@@ -12,29 +12,29 @@ import (
 
 type (
 	Config struct {
-		ExportDir string `toml:"export_directory"`
-		Semester string `toml:"semester"`
-		Courses map[string]Course `toml:"courses"`
+		ExportDirectory string
+		Semester string
+		Courses map[string]Course
 	}
 
 	Course struct {
-		FullName string `toml:"full-name"`
-		Prefix string `toml:"prefix,omitempty"`
-		Export []Export `toml:"export"`
-		Members []GroupMember `toml:"members"`
-		Tutor string `toml:"tutor,omitempty"`
-		Link string `toml:"link,omitempty"`
+		Name string
+		Prefix string `toml:",omitempty"`
+		Export []Export
+		Members []GroupMember
+		Tutor string `toml:",omitempty"`
+		Link string `toml:",omitempty"`
 	}
 
 	Export struct {
-		Filename string `toml:"filename"`
-		Output string `toml:"output"`
+		Filename string
+		Output string
 	}
 
 	GroupMember struct {
-		Firstname string `toml:"firstname"`
-		Lastname string `toml:"lastname"`
-		Id string `toml:"id"`
+		First string
+		Last string
+		ID string
 	}
 )
 
@@ -44,10 +44,10 @@ func ParseConfig(path string, uniDirectory string) Config {
 	exit.ExitWithErr(err)
 
 	// validate export directory
-	if config.ExportDir == "" {
+	if config.ExportDirectory == "" {
 		exit.ExitWithMsg("No export directory is specified.")
 	}
-	exportDirPath := filepath.Join(uniDirectory, config.ExportDir)
+	exportDirPath := filepath.Join(uniDirectory, config.ExportDirectory)
 	exportDirInfo, err := os.Stat(exportDirPath)
 	if os.IsNotExist(err) {
 		err := os.Mkdir(exportDirPath, 0755)
@@ -95,8 +95,8 @@ func (config *Config) PrintCoursesHumanReadable() {
 	fmt.Println("Courses:")
 	for name, course := range config.Courses {
 		fmt.Printf("  - %s", name)
-		if course.FullName != "" {
-			fmt.Printf(" (%s)", course.FullName)
+		if course.Name != "" {
+			fmt.Printf(" (%s)", course.Name)
 		}
 		fmt.Println()
 	}
@@ -105,8 +105,8 @@ func (config *Config) PrintCoursesHumanReadable() {
 func (config *Config) PrintCoursesFishCompletion() {
 	for name, course := range config.Courses {
 		fmt.Print(name)
-		if course.FullName != "" {
-			fmt.Printf("\t%s", course.FullName)
+		if course.Name != "" {
+			fmt.Printf("\t%s", course.Name)
 		}
 		fmt.Println()
 	}

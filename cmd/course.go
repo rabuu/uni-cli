@@ -54,7 +54,7 @@ var addCourseCmd = &cobra.Command{
 		}
 
 		var course cfgfile.Course
-		course.FullName = newFullName
+		course.Name = newFullName
 		course.Prefix = newPrefix
 		course.Link = newLink
 
@@ -100,7 +100,7 @@ var removeCourseCmd = &cobra.Command{
 
 func init() {
 	listCoursesCmd.Flags().BoolVar(&fishFlag, "fish", false, "fish completion syntax")
-	addCourseCmd.Flags().StringVarP(&newFullName, "full-name", "f", "", "the full course name")
+	addCourseCmd.Flags().StringVarP(&newFullName, "name", "n", "", "the full course name")
 	addCourseCmd.Flags().StringVarP(&newPrefix, "prefix", "p", "", "the prefix of the working directories")
 	addCourseCmd.Flags().StringVarP(&newLink, "link", "l", "", "a link to another directory location")
 	removeCourseCmd.Flags().BoolVarP(&deleteRemovedCourse, "delete", "D", false, "delete course directory")

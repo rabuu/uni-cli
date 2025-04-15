@@ -29,8 +29,8 @@ var exportCmd = &cobra.Command{
 			return
 		}
 
-		courseName, number := cwd.WorkingDir(uniDirectory, &config)
-		course := config.Courses[courseName]
+		courseId, number := cwd.WorkingDir(uniDirectory, &config)
+		course := config.Courses[courseId]
 
 		if len(course.Export) == 0 {
 			fmt.Println("No export rules specified.")
@@ -52,7 +52,7 @@ var exportCmd = &cobra.Command{
 			outTempl := template.Must(template.New("output file").Parse(export.Output))
 
 			var outFileBuff bytes.Buffer
-			data := templdata.New(&config, courseName, number)
+			data := templdata.New(&config, courseId, number)
 			err = outTempl.Execute(&outFileBuff, data)
 			exit.ExitWithErr(err)
 			outFile := outFileBuff.String()

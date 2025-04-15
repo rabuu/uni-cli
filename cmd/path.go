@@ -33,21 +33,21 @@ var pathCmd = &cobra.Command{
 			return
 		}
 
-		courseName := args[0]
-		course, ok := config.Courses[courseName]
+		courseId := args[0]
+		course, ok := config.Courses[courseId]
 		if ok {
 			if course.Link != "" {
 				fmt.Println(course.Link)
 				return
 			}
 
-			path := filepath.Join(uniDirectory, courseName)
+			path := filepath.Join(uniDirectory, courseId)
 
 			if materialFlag {
 				materialDir := filepath.Join(path, "material")
 				materialDirInfo, err := os.Stat(materialDir)
 				if err != nil || !materialDirInfo.IsDir() {
-					fmt.Fprintf(os.Stderr, "Error: There is no material directory in course %s.\n", courseName)
+					fmt.Fprintf(os.Stderr, "Error: There is no material directory in course %s.\n", courseId)
 					os.Exit(1)
 				}
 				fmt.Println(materialDir)
@@ -58,7 +58,7 @@ var pathCmd = &cobra.Command{
 			return
 		}
 
-		fmt.Fprintf(os.Stderr, "Error: There is no course %s.\n", courseName)
+		fmt.Fprintf(os.Stderr, "Error: There is no course %s.\n", courseId)
 		os.Exit(1)
 	},
 }

@@ -15,15 +15,15 @@ type TemplateData struct {
 	Course cfgfile.Course
 }
 
-func New(config *cfgfile.Config, courseName string, number int) TemplateData {
-	if !config.ContainsCourse(courseName) {
-		exit.ExitWithMsg("No course:", courseName)
+func New(config *cfgfile.Config, courseId string, number int) TemplateData {
+	if !config.ContainsCourse(courseId) {
+		exit.ExitWithMsg("No course:", courseId)
 	}
 
-	course := config.Courses[courseName]
+	course := config.Courses[courseId]
 
 	data := TemplateData{
-		CourseId: courseName,
+		CourseId: courseId,
 		Number: number,
 		NumberPadded: fmt.Sprintf("%02d", number),
 		Config: *config,
