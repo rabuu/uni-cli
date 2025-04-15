@@ -22,6 +22,7 @@ type (
 		Prefix string `toml:"prefix,omitempty"`
 		Export []Export `toml:"export"`
 		Members []GroupMember `toml:"members"`
+		Tutor string `toml:"tutor,omitempty"`
 		Link string `toml:"link,omitempty"`
 	}
 
