@@ -8,11 +8,11 @@ import (
 )
 
 type TemplateData struct {
-	Course, CourseName string
+	CourseId string
 	Number int
 	NumberPadded string
-	Members []cfgfile.GroupMember
-	Semester string
+	Config cfgfile.Config
+	Course cfgfile.Course
 }
 
 func New(config *cfgfile.Config, courseName string, number int) TemplateData {
@@ -20,13 +20,14 @@ func New(config *cfgfile.Config, courseName string, number int) TemplateData {
 		exit.ExitWithMsg("No course:", courseName)
 	}
 
+	course := config.Courses[courseName]
+
 	data := TemplateData{
-		Course: courseName,
-		CourseName: config.Courses[courseName].FullName,
+		CourseId: courseName,
 		Number: number,
 		NumberPadded: fmt.Sprintf("%02d", number),
-		Members: config.Courses[courseName].Members,
-		Semester: config.Semester,
+		Config: *config,
+		Course: course,
 	}
 
 	return data
