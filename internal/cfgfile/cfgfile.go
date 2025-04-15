@@ -13,6 +13,7 @@ import (
 type (
 	Config struct {
 		ExportDir string `toml:"export_directory"`
+		Semester string `toml:"semester"`
 		Courses map[string]Course `toml:"courses"`
 	}
 
