@@ -21,6 +21,7 @@ type (
 		Name string
 		Prefix string `toml:",omitempty"`
 		Export []Export
+		GroupDescription string `toml:",omitempty"`
 		Members []GroupMember
 		Tutor string `toml:",omitempty"`
 		Link string `toml:",omitempty"`
