@@ -1,10 +1,9 @@
 package templdata
 
 import (
-	"fmt"
-
 	"github.com/rabuu/uni-cli/internal/cfgfile"
 	"github.com/rabuu/uni-cli/internal/exit"
+	"github.com/rabuu/uni-cli/internal/workingdir"
 )
 
 type TemplateData struct {
@@ -25,7 +24,7 @@ func New(config *cfgfile.Config, courseId string, number int) TemplateData {
 	data := TemplateData{
 		CourseId: courseId,
 		Number: number,
-		NumberPadded: fmt.Sprintf("%02d", number),
+		NumberPadded: workingdir.FromNumber(number, ""),
 		Config: *config,
 		Course: course,
 	}

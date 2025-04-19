@@ -11,6 +11,7 @@ import (
 	"github.com/rabuu/uni-cli/internal/cwd"
 	"github.com/rabuu/uni-cli/internal/exit"
 	"github.com/rabuu/uni-cli/internal/templdata"
+	"github.com/rabuu/uni-cli/internal/workingdir"
 	"github.com/spf13/cobra"
 )
 
@@ -24,7 +25,7 @@ var nextCmd = &cobra.Command{
 
 		prefix := config.Courses[course].Prefix
 		number := testNextDir(prefix, course)
-		nextDir := fmt.Sprintf("%s%02d", prefix, number)
+		nextDir := workingdir.FromNumber(number, prefix)
 
 		err := os.Mkdir(nextDir, 0755)
 		exit.ExitWithErr(err)
@@ -70,7 +71,7 @@ var nextCmd = &cobra.Command{
 
 func testNextDir(prefix string, course string) int {
 	for i := 1; i <= 99; i++ {
-		testDir := fmt.Sprintf("%s%02d", prefix, i)
+		testDir := workingdir.FromNumber(i, prefix)
 		testDirPath := filepath.Join(uniDirectory, course, testDir)
 
 		_, err := os.Stat(testDirPath)

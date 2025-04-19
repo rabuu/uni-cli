@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 
 	"github.com/rabuu/uni-cli/internal/exit"
+	"github.com/rabuu/uni-cli/internal/workingdir"
 	"github.com/spf13/cobra"
 )
 
@@ -14,7 +16,7 @@ var exportFlag bool
 var pathCmd = &cobra.Command{
 	Use: "path",
 	Short: "Get paths of uni directory and its courses",
-	Args: cobra.RangeArgs(0, 1),
+	Args: cobra.RangeArgs(0, 2),
 	Run: func(cmd *cobra.Command, args []string) {
 		if exportFlag {
 			if len(args) != 0 {
@@ -53,10 +55,27 @@ var pathCmd = &cobra.Command{
 				materialDir := filepath.Join(path, "material")
 				materialDirInfo, err := os.Stat(materialDir)
 				if err != nil || !materialDirInfo.IsDir() {
-					fmt.Fprintf(os.Stderr, "Error: There is no material directory in course %s.\n", courseId)
-					os.Exit(1)
+					exit.ExitWithMsg("Error: There is no material directory in course", courseId)
 				}
 				fmt.Println(materialDir)
+				return
+			}
+
+			if len(args) == 2 {
+				i, err := strconv.Atoi(args[1])
+				if err != nil {
+					exit.ExitWithErr(err)
+				}
+
+				workingDirName := workingdir.FromNumber(i, course.Prefix)
+
+				workingDir := filepath.Join(path, workingDirName)
+				workingDirInfo, err := os.Stat(workingDir)
+				if err != nil || !workingDirInfo.IsDir() {
+					exit.ExitWithMsg("Error: There is no directory", workingDirName, "in course", courseId)
+				}
+
+				fmt.Println(workingDir)
 				return
 			}
 
