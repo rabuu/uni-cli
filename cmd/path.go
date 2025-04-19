@@ -28,6 +28,12 @@ var pathCmd = &cobra.Command{
 			return
 		}
 
+		if materialFlag {
+			if len(args) != 1 {
+				exit.ExitWithMsg("The --material flag can only be used for course directories")
+			}
+		}
+
 		if len(args) == 0 {
 			fmt.Println(uniDirectory)
 			return
