@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	"github.com/rabuu/uni-cli/internal/exit"
 	"github.com/rabuu/uni-cli/internal/workingdir"
@@ -45,7 +46,7 @@ var pathCmd = &cobra.Command{
 		course, ok := config.Courses[courseId]
 		if ok {
 			if course.Link != "" {
-				fmt.Println(course.Link)
+				fmt.Println(escapeLink(course.Link))
 				return
 			}
 
@@ -91,4 +92,17 @@ var pathCmd = &cobra.Command{
 func init() {
 	pathCmd.Flags().BoolVarP(&materialFlag, "material", "m", false, "material directory")
 	pathCmd.Flags().BoolVarP(&exportFlag, "export", "x", false, "global export directory")
+}
+
+func escapeLink(link string) string {
+	after, found := strings.CutPrefix(link, "~")
+	if found {
+		homedir, err := os.UserHomeDir()
+		if err != nil {
+			exit.ExitWithErr(err)
+		}
+		return filepath.Join(homedir, after)
+	}
+
+	return link
 }
