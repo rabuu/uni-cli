@@ -44,48 +44,48 @@ var pathCmd = &cobra.Command{
 
 		courseId := args[0]
 		course, ok := config.Courses[courseId]
-		if ok {
-			if course.Link != "" {
-				fmt.Println(escapeLink(course.Link))
-				return
-			}
+		if !ok {
+			fmt.Fprintf(os.Stderr, "Error: There is no course %s.\n", courseId)
+			os.Exit(1)
+		}
 
-			path := filepath.Join(uniDirectory, courseId)
-
-			if materialFlag {
-				materialDir := filepath.Join(path, "material")
-				materialDirInfo, err := os.Stat(materialDir)
-				if err != nil || !materialDirInfo.IsDir() {
-					exit.ExitWithMsg("Error: There is no material directory in course", courseId)
-				}
-				fmt.Println(materialDir)
-				return
-			}
-
-			if len(args) == 2 {
-				i, err := strconv.Atoi(args[1])
-				if err != nil {
-					exit.ExitWithErr(err)
-				}
-
-				workingDirName := workingdir.FromNumber(i, course.Prefix)
-
-				workingDir := filepath.Join(path, workingDirName)
-				workingDirInfo, err := os.Stat(workingDir)
-				if err != nil || !workingDirInfo.IsDir() {
-					exit.ExitWithMsg("Error: There is no directory", workingDirName, "in course", courseId)
-				}
-
-				fmt.Println(workingDir)
-				return
-			}
-
-			fmt.Println(path)
+		if course.Link != "" {
+			fmt.Println(escapeLink(course.Link))
 			return
 		}
 
-		fmt.Fprintf(os.Stderr, "Error: There is no course %s.\n", courseId)
-		os.Exit(1)
+		path := filepath.Join(uniDirectory, courseId)
+
+		if materialFlag {
+			materialDir := filepath.Join(path, "material")
+			materialDirInfo, err := os.Stat(materialDir)
+			if err != nil || !materialDirInfo.IsDir() {
+				exit.ExitWithMsg("Error: There is no material directory in course", courseId)
+			}
+			fmt.Println(materialDir)
+			return
+		}
+
+		if len(args) == 2 {
+			i, err := strconv.Atoi(args[1])
+			if err != nil {
+				exit.ExitWithErr(err)
+			}
+
+			workingDirName := workingdir.FromNumber(i, course.Prefix)
+
+			workingDir := filepath.Join(path, workingDirName)
+			workingDirInfo, err := os.Stat(workingDir)
+			if err != nil || !workingDirInfo.IsDir() {
+				exit.ExitWithMsg("Error: There is no directory", workingDirName, "in course", courseId)
+			}
+
+			fmt.Println(workingDir)
+			return
+		}
+
+		fmt.Println(path)
+		return
 	},
 }
 
