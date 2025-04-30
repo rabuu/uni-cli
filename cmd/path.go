@@ -49,15 +49,16 @@ var pathCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		var basePath string
+
 		if course.Link != "" {
-			fmt.Println(escapeLink(course.Link))
-			return
+			basePath = escapeLink(course.Link)
+		} else {
+			basePath = filepath.Join(uniDirectory, courseId)
 		}
 
-		path := filepath.Join(uniDirectory, courseId)
-
 		if materialFlag {
-			materialDir := filepath.Join(path, "material")
+			materialDir := filepath.Join(basePath, "material")
 			materialDirInfo, err := os.Stat(materialDir)
 			if err != nil || !materialDirInfo.IsDir() {
 				exit.ExitWithMsg("Error: There is no material directory in course", courseId)
@@ -67,14 +68,16 @@ var pathCmd = &cobra.Command{
 		}
 
 		if len(args) == 2 {
+			var workingDirName string
+
 			i, err := strconv.Atoi(args[1])
 			if err != nil {
-				exit.ExitWithErr(err)
+				workingDirName = args[1]
+			} else {
+				workingDirName = workingdir.FromNumber(i, course.Prefix)
 			}
 
-			workingDirName := workingdir.FromNumber(i, course.Prefix)
-
-			workingDir := filepath.Join(path, workingDirName)
+			workingDir := filepath.Join(basePath, workingDirName)
 			workingDirInfo, err := os.Stat(workingDir)
 			if err != nil || !workingDirInfo.IsDir() {
 				exit.ExitWithMsg("Error: There is no directory", workingDirName, "in course", courseId)
@@ -84,7 +87,7 @@ var pathCmd = &cobra.Command{
 			return
 		}
 
-		fmt.Println(path)
+		fmt.Println(basePath)
 		return
 	},
 }
