@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"text/template"
 
-	"github.com/rabuu/uni-cli/internal/cwd"
+	"github.com/rabuu/uni-cli/internal/dir"
 	"github.com/rabuu/uni-cli/internal/exit"
 	"github.com/rabuu/uni-cli/internal/templating"
 	"github.com/spf13/cobra"
@@ -29,7 +29,7 @@ var exportCmd = &cobra.Command{
 			return
 		}
 
-		courseId, number := cwd.WorkingDir(uniDirectory, &config)
+		courseId, number := dir.CwdWorkingDir(uniDirectory, &config)
 		course := config.Courses[courseId]
 
 		if len(course.Export) == 0 {

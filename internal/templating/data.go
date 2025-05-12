@@ -2,8 +2,8 @@ package templating
 
 import (
 	"github.com/rabuu/uni-cli/internal/cfgfile"
+	"github.com/rabuu/uni-cli/internal/dir"
 	"github.com/rabuu/uni-cli/internal/exit"
-	"github.com/rabuu/uni-cli/internal/workingdir"
 )
 
 type TemplateData struct {
@@ -24,7 +24,7 @@ func Data(config *cfgfile.Config, courseId string, number int) TemplateData {
 	data := TemplateData{
 		CourseId: courseId,
 		Number: number,
-		NumberPadded: workingdir.FromNumber(number, ""),
+		NumberPadded: dir.FormatWorkdirName(number, ""),
 		Config: *config,
 		Course: course,
 	}

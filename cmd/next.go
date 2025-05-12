@@ -8,10 +8,9 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/rabuu/uni-cli/internal/cwd"
+	"github.com/rabuu/uni-cli/internal/dir"
 	"github.com/rabuu/uni-cli/internal/exit"
 	"github.com/rabuu/uni-cli/internal/templating"
-	"github.com/rabuu/uni-cli/internal/workingdir"
 	"github.com/spf13/cobra"
 )
 
@@ -21,11 +20,11 @@ var nextCmd = &cobra.Command{
 	Short: "Generate next working directory",
 	Args: cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
-		course := cwd.CourseDir(uniDirectory, &config)
+		course := dir.CwdCourseDir(uniDirectory, &config)
 
 		prefix := config.Courses[course].Prefix
 		number := testNextDir(prefix, course)
-		nextDir := workingdir.FromNumber(number, prefix)
+		nextDir := dir.FormatWorkdirName(number, prefix)
 
 		err := os.Mkdir(nextDir, 0755)
 		exit.ExitWithErr(err)
@@ -71,7 +70,7 @@ var nextCmd = &cobra.Command{
 
 func testNextDir(prefix string, course string) int {
 	for i := 1; i <= 99; i++ {
-		testDir := workingdir.FromNumber(i, prefix)
+		testDir := dir.FormatWorkdirName(i, prefix)
 		testDirPath := filepath.Join(uniDirectory, course, testDir)
 
 		_, err := os.Stat(testDirPath)

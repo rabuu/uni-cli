@@ -1,4 +1,4 @@
-package cwd
+package dir
 
 import (
 	"os"
@@ -10,7 +10,7 @@ import (
 	"github.com/rabuu/uni-cli/internal/exit"
 )
 
-func CourseDir(uniDirectory string, config *cfgfile.Config) string {
+func CwdCourseDir(uniDirectory string, config *cfgfile.Config) string {
 	cwd, err := os.Getwd()
 	exit.ExitWithErr(err)
 
@@ -26,7 +26,7 @@ func CourseDir(uniDirectory string, config *cfgfile.Config) string {
 	return course
 }
 
-func WorkingDir(uniDirectory string, config *cfgfile.Config) (course string, number int) {
+func CwdWorkingDir(uniDirectory string, config *cfgfile.Config) (course string, number int) {
 	cwd, err := os.Getwd()
 	exit.ExitWithErr(err)
 

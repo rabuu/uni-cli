@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/rabuu/uni-cli/internal/dir"
 	"github.com/rabuu/uni-cli/internal/exit"
-	"github.com/rabuu/uni-cli/internal/workingdir"
 	"github.com/spf13/cobra"
 )
 
@@ -74,7 +74,7 @@ var pathCmd = &cobra.Command{
 			if err != nil {
 				workingDirName = args[1]
 			} else {
-				workingDirName = workingdir.FromNumber(i, course.Prefix)
+				workingDirName = dir.FormatWorkdirName(i, course.Prefix)
 			}
 
 			workingDir := filepath.Join(basePath, workingDirName)
