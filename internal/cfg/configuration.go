@@ -20,16 +20,16 @@ type (
 	Course struct {
 		Name string
 		Prefix string `toml:",omitempty"`
-		Export []Export
+		ExportFile []FileMap
 		GroupDescription string `toml:",omitempty"`
 		Members []GroupMember
 		Tutor string `toml:",omitempty"`
 		Link string `toml:",omitempty"`
 	}
 
-	Export struct {
-		Filename string
-		Output string
+	FileMap struct {
+		From string
+		To string
 	}
 
 	GroupMember struct {

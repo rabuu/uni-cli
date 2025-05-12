@@ -20,10 +20,10 @@ var nextCmd = &cobra.Command{
 	Short: "Generate next working directory",
 	Args: cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
-		course := dir.CwdCourseDir(uniDirectory, &config)
+		course, cwd := dir.CwdCourseDir(uniDirectory, &config)
 
 		prefix := config.Courses[course].Prefix
-		number := testNextDir(prefix, course)
+		number := testNextDir(cwd, prefix)
 		nextDir := dir.FormatWorkdirName(number, prefix)
 
 		err := os.Mkdir(nextDir, 0755)
@@ -34,12 +34,12 @@ var nextCmd = &cobra.Command{
 			exit.ExitWithErr(err)
 
 			if d.IsDir() {
-				stripped := strings.TrimPrefix(path, filepath.Join(uniDirectory, course, "template"))
+				stripped := strings.TrimPrefix(path, filepath.Join(cwd, "template"))
 				if stripped == "" {
 					return nil
 				}
 
-				target := filepath.Join(uniDirectory, course, nextDir, stripped)
+				target := filepath.Join(cwd, nextDir, stripped)
 				err := os.Mkdir(target, 0755)
 				exit.ExitWithErr(err)
 			}
@@ -51,8 +51,8 @@ var nextCmd = &cobra.Command{
 			templ, err := template.ParseFiles(path)
 			exit.ExitWithErr(err)
 
-			stripped := strings.TrimPrefix(path, filepath.Join(uniDirectory, course, "template"))
-			target := filepath.Join(uniDirectory, course, nextDir, stripped)
+			stripped := strings.TrimPrefix(path, filepath.Join(cwd, "template"))
+			target := filepath.Join(cwd, nextDir, stripped)
 
 			file, err := os.Create(target)
 			exit.ExitWithErr(err)
@@ -68,10 +68,10 @@ var nextCmd = &cobra.Command{
 	},
 }
 
-func testNextDir(prefix string, course string) int {
+func testNextDir(cwd string, prefix string) int {
 	for i := 1; i <= 99; i++ {
 		testDir := dir.FormatWorkdirName(i, prefix)
-		testDirPath := filepath.Join(uniDirectory, course, testDir)
+		testDirPath := filepath.Join(cwd, testDir)
 
 		_, err := os.Stat(testDirPath)
 		if os.IsNotExist(err) {

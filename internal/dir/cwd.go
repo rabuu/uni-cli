@@ -10,7 +10,7 @@ import (
 	"github.com/rabuu/uni-cli/internal/exit"
 )
 
-func CwdCourseDir(uniDirectory string, config *cfg.Config) string {
+func CwdCourseDir(uniDirectory string, config *cfg.Config) (course string, cwd string) {
 	cwd, err := os.Getwd()
 	exit.ExitWithErr(err)
 
@@ -18,15 +18,15 @@ func CwdCourseDir(uniDirectory string, config *cfg.Config) string {
 		exit.ExitWithMsg("You're not in a course directory.")
 	}
 
-	course := filepath.Base(cwd)
+	course = filepath.Base(cwd)
 	if !config.ContainsCourse(course) {
 		exit.ExitWithMsg("You're not in a course directory.")
 	}
 
-	return course
+	return
 }
 
-func CwdWorkingDir(uniDirectory string, config *cfg.Config) (course string, number int) {
+func CwdWorkingDir(uniDirectory string, config *cfg.Config) (course string, number int, cwd string) {
 	cwd, err := os.Getwd()
 	exit.ExitWithErr(err)
 

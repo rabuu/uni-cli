@@ -1,12 +1,10 @@
 package cmd
 
 import (
-	"bytes"
 	"fmt"
+	"io"
 	"os"
-	"os/exec"
 	"path/filepath"
-	"text/template"
 
 	"github.com/rabuu/uni-cli/internal/dir"
 	"github.com/rabuu/uni-cli/internal/exit"
@@ -29,40 +27,38 @@ var exportCmd = &cobra.Command{
 			return
 		}
 
-		courseId, number := dir.CwdWorkingDir(uniDirectory, &config)
+		courseId, number, cwd := dir.CwdWorkingDir(uniDirectory, &config)
 		course := config.Courses[courseId]
 
-		if len(course.Export) == 0 {
-			fmt.Println("No export rules specified.")
-		}
-		
-		for _, export := range course.Export {
-			fileInfo, err := os.Stat(export.Filename)
-			
+		data := templating.Data(&config, courseId, number)
+
+		for _, fileMap := range course.ExportFile {
+			inFileName := templating.GenerateString(data, fileMap.From)
+			inFilePath := filepath.Join(cwd, inFileName)
+
+			inFile, err := os.Open(inFilePath)
 			if os.IsNotExist(err) {
-				fmt.Println("Not found:", export.Filename)
+				fmt.Println("Not found:", inFileName)
 				continue
 			}
 			exit.ExitWithErr(err)
+			defer inFile.Close()
 
-			if !fileInfo.Mode().Type().IsRegular() {
-				exit.ExitWithMsg("Error: Not a regular file:", export.Filename)
-			}
+			outFileName := templating.GenerateString(data, fileMap.To)
+			outFilePath := filepath.Join(exportDirectory, outFileName)
 
-			outTempl := template.Must(template.New("output file").Parse(export.Output))
-
-			var outFileBuff bytes.Buffer
-			data := templating.Data(&config, courseId, number)
-			err = outTempl.Execute(&outFileBuff, data)
+			outFile, err := os.Create(outFilePath)
 			exit.ExitWithErr(err)
-			outFile := outFileBuff.String()
-			outFilePath := filepath.Join(exportDirectory, outFile)
+			defer outFile.Close()
 
-			cpCmd := exec.Command("cp", export.Filename, outFilePath)
-			err = cpCmd.Run()
+			_, err = io.Copy(outFile, inFile)
 			exit.ExitWithErr(err)
 
-			fmt.Printf("Exported %s to %s.\n", export.Filename, outFile)
+			fmt.Printf("Exported %s to %s.\n", inFileName, outFileName)
+		}
+
+		if len(course.ExportFile) == 0 {
+			fmt.Println("No export rules specified.")
 		}
 	},
 }
