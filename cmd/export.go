@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"archive/zip"
 	"fmt"
 	"io"
 	"os"
@@ -57,7 +58,46 @@ var exportCmd = &cobra.Command{
 			fmt.Printf("Exported %s to %s.\n", inFileName, outFileName)
 		}
 
-		if len(course.ExportFile) == 0 {
+		for _, zipCfg := range course.ExportZip {
+			archiveFileName := templating.GenerateString(data, zipCfg.ArchiveFile)
+			archiveFilePath := filepath.Join(exportDirectory, archiveFileName + ".zip")
+
+			archive, err := os.Create(archiveFilePath)
+			exit.ExitWithErr(err)
+			defer archive.Close()
+			fmt.Printf("Export ZIP archive %s...\n", archiveFileName)
+
+			zipper := zip.NewWriter(archive)
+
+			for _, fileMap := range zipCfg.Include {
+				inFileName := templating.GenerateString(data, fileMap.From)
+				inFilePath := filepath.Join(cwd, inFileName)
+
+				inFile, err := os.Open(inFilePath)
+				if os.IsNotExist(err) {
+					fmt.Println("\tNot found:", inFileName)
+					continue
+				}
+				exit.ExitWithErr(err)
+				defer inFile.Close()
+
+				outFileName := templating.GenerateString(data, fileMap.To)
+				outFilePath := filepath.Join(archiveFileName, outFileName)
+
+				outFile, err := zipper.Create(outFilePath)
+				exit.ExitWithErr(err)
+
+				_, err = io.Copy(outFile, inFile)
+				exit.ExitWithErr(err)
+
+				fmt.Printf("\tZipped %s to %s.\n", inFileName, outFilePath)
+			}
+
+			zipper.Close()
+			fmt.Println("Closed ZIP archive.")
+		}
+
+		if len(course.ExportFile) + len(course.ExportZip) == 0 {
 			fmt.Println("No export rules specified.")
 		}
 	},

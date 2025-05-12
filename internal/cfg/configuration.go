@@ -21,6 +21,7 @@ type (
 		Name string
 		Prefix string `toml:",omitempty"`
 		ExportFile []FileMap
+		ExportZip []ZipConfig
 		GroupDescription string `toml:",omitempty"`
 		Members []GroupMember
 		Tutor string `toml:",omitempty"`
@@ -30,6 +31,11 @@ type (
 	FileMap struct {
 		From string
 		To string
+	}
+
+	ZipConfig struct {
+		ArchiveFile string
+		Include []FileMap
 	}
 
 	GroupMember struct {
