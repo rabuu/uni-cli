@@ -1,4 +1,4 @@
-package cfgfile
+package cfg
 
 import (
 	"bytes"

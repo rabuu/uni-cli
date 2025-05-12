@@ -1,7 +1,7 @@
 package templating
 
 import (
-	"github.com/rabuu/uni-cli/internal/cfgfile"
+	"github.com/rabuu/uni-cli/internal/cfg"
 	"github.com/rabuu/uni-cli/internal/dir"
 	"github.com/rabuu/uni-cli/internal/exit"
 )
@@ -10,11 +10,11 @@ type TemplateData struct {
 	CourseId string
 	Number int
 	NumberPadded string
-	Config cfgfile.Config
-	Course cfgfile.Course
+	Config cfg.Config
+	Course cfg.Course
 }
 
-func Data(config *cfgfile.Config, courseId string, number int) TemplateData {
+func Data(config *cfg.Config, courseId string, number int) TemplateData {
 	if !config.ContainsCourse(courseId) {
 		exit.ExitWithMsg("No course:", courseId)
 	}

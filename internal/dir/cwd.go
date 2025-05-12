@@ -6,11 +6,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/rabuu/uni-cli/internal/cfgfile"
+	"github.com/rabuu/uni-cli/internal/cfg"
 	"github.com/rabuu/uni-cli/internal/exit"
 )
 
-func CwdCourseDir(uniDirectory string, config *cfgfile.Config) string {
+func CwdCourseDir(uniDirectory string, config *cfg.Config) string {
 	cwd, err := os.Getwd()
 	exit.ExitWithErr(err)
 
@@ -26,7 +26,7 @@ func CwdCourseDir(uniDirectory string, config *cfgfile.Config) string {
 	return course
 }
 
-func CwdWorkingDir(uniDirectory string, config *cfgfile.Config) (course string, number int) {
+func CwdWorkingDir(uniDirectory string, config *cfg.Config) (course string, number int) {
 	cwd, err := os.Getwd()
 	exit.ExitWithErr(err)
 

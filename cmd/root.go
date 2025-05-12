@@ -4,13 +4,13 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/rabuu/uni-cli/internal/cfgfile"
+	"github.com/rabuu/uni-cli/internal/cfg"
 	"github.com/rabuu/uni-cli/internal/exit"
 	"github.com/spf13/cobra"
 )
 
 var configFile string
-var config cfgfile.Config
+var config cfg.Config
 
 var exportDirectory string
 
@@ -64,6 +64,6 @@ func validation() {
 		exit.ExitWithMsg("Error: is directory", configFile)
 	}
 
-	config = cfgfile.ParseConfig(configFile, uniDirectory)
+	config = cfg.ParseConfig(configFile, uniDirectory)
 	exportDirectory = filepath.Join(uniDirectory, config.ExportDirectory)
 }
