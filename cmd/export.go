@@ -10,7 +10,7 @@ import (
 
 	"github.com/rabuu/uni-cli/internal/cwd"
 	"github.com/rabuu/uni-cli/internal/exit"
-	"github.com/rabuu/uni-cli/internal/templdata"
+	"github.com/rabuu/uni-cli/internal/templating"
 	"github.com/spf13/cobra"
 )
 
@@ -52,7 +52,7 @@ var exportCmd = &cobra.Command{
 			outTempl := template.Must(template.New("output file").Parse(export.Output))
 
 			var outFileBuff bytes.Buffer
-			data := templdata.New(&config, courseId, number)
+			data := templating.Data(&config, courseId, number)
 			err = outTempl.Execute(&outFileBuff, data)
 			exit.ExitWithErr(err)
 			outFile := outFileBuff.String()

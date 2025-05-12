@@ -10,7 +10,7 @@ import (
 
 	"github.com/rabuu/uni-cli/internal/cwd"
 	"github.com/rabuu/uni-cli/internal/exit"
-	"github.com/rabuu/uni-cli/internal/templdata"
+	"github.com/rabuu/uni-cli/internal/templating"
 	"github.com/rabuu/uni-cli/internal/workingdir"
 	"github.com/spf13/cobra"
 )
@@ -58,7 +58,7 @@ var nextCmd = &cobra.Command{
 			file, err := os.Create(target)
 			exit.ExitWithErr(err)
 
-			data := templdata.New(&config, course, number)
+			data := templating.Data(&config, course, number)
 			err = templ.Execute(file, data)
 			exit.ExitWithErr(err)
 
