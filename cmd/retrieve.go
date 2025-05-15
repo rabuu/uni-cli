@@ -40,7 +40,7 @@ var retrieveCmd = &cobra.Command{
 			if fileMap.To == "" {
 				outFileName = filepath.Base(inFilePath)
 			} else {
-				templating.GenerateString(data, fileMap.To)
+				outFileName = templating.GenerateString(data, fileMap.To)
 			}
 
 			outFilePath := filepath.Join(cwd, outFileName)
