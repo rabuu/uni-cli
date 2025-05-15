@@ -15,6 +15,7 @@ type (
 	FileMap struct {
 		From string
 		To string `toml:",omitempty"`
+		Move bool `toml:",omitempty"`
 	}
 
 	GroupMember struct {

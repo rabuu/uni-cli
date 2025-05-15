@@ -61,6 +61,12 @@ var exportCmd = &cobra.Command{
 			exit.ExitWithErr(err)
 
 			fmt.Printf("Exported %s to %s.\n", inFileName, outFileName)
+
+			if fileMap.Move {
+				err := os.Remove(inFilePath)
+				exit.ExitWithErr(err)
+				fmt.Println("\t(and deleted source file)")
+			}
 		}
 
 		if len(course.ExportFile) == 0 {

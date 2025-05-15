@@ -28,8 +28,6 @@ var retrieveCmd = &cobra.Command{
 			inFileName := templating.GenerateString(data, fileMap.From)
 			inFilePath := util.EscapeHomeDir(inFileName)
 
-			fmt.Println(inFilePath)
-
 			inFile, err := os.Open(inFilePath)
 			if os.IsNotExist(err) {
 				fmt.Println("Not found:", inFileName)
@@ -55,6 +53,12 @@ var retrieveCmd = &cobra.Command{
 			exit.ExitWithErr(err)
 
 			fmt.Printf("Retrieved %s from %s.\n", outFileName, inFileName)
+
+			if fileMap.Move {
+				err := os.Remove(inFilePath)
+				exit.ExitWithErr(err)
+				fmt.Println("\t(and deleted source file)")
+			}
 		}
 
 		if len(course.RetrieveFile) == 0 {
