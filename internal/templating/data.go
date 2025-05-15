@@ -12,6 +12,7 @@ type TemplateData struct {
 	NumberPadded string
 	Config cfg.Config
 	Course cfg.Course
+	Date DateUtil
 }
 
 func Data(config *cfg.Config, courseId string, number int) TemplateData {
@@ -27,6 +28,7 @@ func Data(config *cfg.Config, courseId string, number int) TemplateData {
 		NumberPadded: dir.FormatWorkdirName(number, ""),
 		Config: *config,
 		Course: course,
+		Date: DateUtil{ format: config.DateFormat },
 	}
 
 	return data

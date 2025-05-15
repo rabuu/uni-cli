@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/BurntSushi/toml"
 	"github.com/rabuu/uni-cli/internal/exit"
@@ -14,6 +15,7 @@ type Config struct {
 	ExportDirectory string
 	Semester string
 	Courses map[string]Course
+	DateFormat string
 }
 
 func ParseConfig(path string, uniDirectory string) Config {
@@ -41,6 +43,10 @@ func ParseConfig(path string, uniDirectory string) Config {
 
 	if config.Courses == nil {
 		config.Courses = make(map[string]Course)
+	}
+
+	if config.DateFormat == "" {
+		config.DateFormat = time.DateOnly
 	}
 
 	return config
