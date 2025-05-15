@@ -4,6 +4,7 @@ type (
 	Course struct {
 		Name string
 		Prefix string `toml:",omitempty"`
+		RetrieveFile []FileMap
 		ExportFile []FileMap
 		GroupDescription string `toml:",omitempty"`
 		Members []GroupMember
