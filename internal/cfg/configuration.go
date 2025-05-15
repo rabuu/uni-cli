@@ -10,34 +10,11 @@ import (
 	"github.com/rabuu/uni-cli/internal/exit"
 )
 
-type (
-	Config struct {
-		ExportDirectory string
-		Semester string
-		Courses map[string]Course
-	}
-
-	Course struct {
-		Name string
-		Prefix string `toml:",omitempty"`
-		ExportFile []FileMap
-		GroupDescription string `toml:",omitempty"`
-		Members []GroupMember
-		Tutor string `toml:",omitempty"`
-		Link string `toml:",omitempty"`
-	}
-
-	FileMap struct {
-		From string
-		To string
-	}
-
-	GroupMember struct {
-		First string
-		Last string
-		ID string
-	}
-)
+type Config struct {
+	ExportDirectory string
+	Semester string
+	Courses map[string]Course
+}
 
 func ParseConfig(path string, uniDirectory string) Config {
 	var config Config
