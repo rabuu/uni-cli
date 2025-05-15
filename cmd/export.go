@@ -44,7 +44,13 @@ var exportCmd = &cobra.Command{
 			exit.ExitWithErr(err)
 			defer inFile.Close()
 
-			outFileName := templating.GenerateString(data, fileMap.To)
+			var outFileName string
+			if fileMap.To == "" {
+				outFileName = filepath.Base(inFilePath)
+			} else {
+				templating.GenerateString(data, fileMap.To)
+			}
+
 			outFilePath := filepath.Join(exportDirectory, outFileName)
 
 			outFile, err := os.Create(outFilePath)
