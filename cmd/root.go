@@ -39,6 +39,7 @@ func init() {
 	rootCmd.AddCommand(configCmd)
 	rootCmd.AddCommand(exportCmd)
 	rootCmd.AddCommand(retrieveCmd)
+	rootCmd.AddCommand(webCmd)
 }
 
 func validation() {

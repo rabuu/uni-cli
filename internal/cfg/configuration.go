@@ -16,6 +16,7 @@ type Config struct {
 	Semester string
 	Courses map[string]Course
 	DateFormat string
+	Web map[string]string
 }
 
 func ParseConfig(path string, uniDirectory string) Config {
@@ -47,6 +48,10 @@ func ParseConfig(path string, uniDirectory string) Config {
 
 	if config.DateFormat == "" {
 		config.DateFormat = time.DateOnly
+	}
+
+	if config.Web == nil {
+		config.Web = make(map[string]string)
 	}
 
 	return config

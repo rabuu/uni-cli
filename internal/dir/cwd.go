@@ -56,3 +56,26 @@ func CwdWorkingDir(uniDirectory string, config *cfg.Config) (course string, numb
 
 	return
 }
+
+func CwdMaybeCourse(uniDirectory string, config *cfg.Config) (course string) {
+	cwd, err := os.Getwd()
+	exit.ExitWithErr(err)
+
+	rest := cwd
+	for rest != "/" {
+		dir := filepath.Dir(rest)
+
+		if dir == uniDirectory {
+			maybeCourse := filepath.Base(rest)
+			if config.ContainsCourse(maybeCourse) {
+				course = maybeCourse
+			}
+
+			return
+		}
+
+		rest = dir
+	}
+
+	return
+}

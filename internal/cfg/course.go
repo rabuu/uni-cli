@@ -10,6 +10,7 @@ type (
 		Members []GroupMember
 		Tutor string `toml:",omitempty"`
 		Link string `toml:",omitempty"`
+		Web map[string]string
 	}
 
 	FileMap struct {
