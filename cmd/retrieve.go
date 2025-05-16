@@ -16,7 +16,7 @@ import (
 var retrieveCmd = &cobra.Command{
 	Use: "retrieve",
 	Aliases: []string{"r"},
-	Short: "Retrieve material from other locations",
+	Short: "Import files into a course directory",
 	Args: cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		courseId, number, cwd := dir.CwdWorkingDir(uniDirectory, &config)
