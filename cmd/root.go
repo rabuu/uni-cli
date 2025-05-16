@@ -40,6 +40,7 @@ func init() {
 	rootCmd.AddCommand(exportCmd)
 	rootCmd.AddCommand(retrieveCmd)
 	rootCmd.AddCommand(webCmd)
+	rootCmd.AddCommand(scriptCmd)
 }
 
 func validation() {
