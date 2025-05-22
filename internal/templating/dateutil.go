@@ -23,10 +23,6 @@ func (util DateUtil) NextWeekday(day string, weekOffset int) (date string) {
 
 	daysUntilWeekday := (int(weekday) - int(now.Weekday()) + 7) % 7
 
-	if daysUntilWeekday == 0 {
-		daysUntilWeekday = 7
-	}
-
 	t := now.AddDate(0, 0, daysUntilWeekday + (7 * weekOffset))
 	date = t.Format(util.format)
 	return
