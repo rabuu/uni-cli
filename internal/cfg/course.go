@@ -5,6 +5,7 @@ type (
 		Name string
 		Prefix string `toml:",omitempty"`
 		RetrieveFile []FileMap
+		RetrieveZip []FileMap
 		ExportFile []FileMap
 		GroupDescription string `toml:",omitempty"`
 		Members []GroupMember
