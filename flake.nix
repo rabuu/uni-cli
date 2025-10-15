@@ -10,9 +10,10 @@
         pkgs = import nixpkgs { inherit system; };
       in {
         devShells.default = pkgs.mkShell {
-          buildInputs = [
-            pkgs.go
-            pkgs.just
+          buildInputs = with pkgs; [
+            go
+            gopls
+            just
           ];
         };
       }
