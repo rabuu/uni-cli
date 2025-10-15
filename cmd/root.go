@@ -68,5 +68,5 @@ func validation() {
 	}
 
 	config = cfg.ParseConfig(configFile, uniDirectory)
-	exportDirectory = filepath.Join(uniDirectory, config.ExportDirectory)
+	exportDirectory = filepath.Join(uniDirectory, "export")
 }

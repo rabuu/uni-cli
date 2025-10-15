@@ -12,7 +12,6 @@ import (
 )
 
 type Config struct {
-	ExportDirectory string
 	Semester string
 	DateFormat string
 	Courses map[string]Course
@@ -25,10 +24,7 @@ func ParseConfig(path string, uniDirectory string) Config {
 	exit.ExitWithErr(err)
 
 	// validate export directory
-	if config.ExportDirectory == "" {
-		exit.ExitWithMsg("No export directory is specified.")
-	}
-	exportDirPath := filepath.Join(uniDirectory, config.ExportDirectory)
+	exportDirPath := filepath.Join(uniDirectory, "export")
 	exportDirInfo, err := os.Stat(exportDirPath)
 	if os.IsNotExist(err) {
 		err := os.Mkdir(exportDirPath, 0755)
@@ -39,7 +35,7 @@ func ParseConfig(path string, uniDirectory string) Config {
 		exit.ExitWithErr(err)
 	}
 	if !exportDirInfo.IsDir() {
-		exit.ExitWithMsg("Specified export directory is no directory.")
+		exit.ExitWithMsg("Export directory is no directory.")
 	}
 
 	if config.Courses == nil {
