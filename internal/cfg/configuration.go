@@ -14,8 +14,8 @@ import (
 type Config struct {
 	ExportDirectory string
 	Semester string
-	Courses map[string]Course
 	DateFormat string
+	Courses map[string]Course
 	Web map[string]string
 }
 
