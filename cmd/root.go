@@ -9,12 +9,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var uniDirectory string
+var exportDirectory string
+
 var configFile string
 var config cfg.Config
 
-var exportDirectory string
-
-var uniDirectory string
 var rootCmd = &cobra.Command{
 	Use:   "uni",
 	Short: "University workflow tool",
@@ -68,5 +68,13 @@ func validation() {
 	}
 
 	config = cfg.ParseConfig(configFile, uniDirectory)
+
+	if config.FollowSymlinks {
+		uniDirectory, err = filepath.EvalSymlinks(uniDirectory)
+		exit.ExitWithErr(err)
+		configFile, err = filepath.EvalSymlinks(configFile)
+		exit.ExitWithErr(err)
+	}
+
 	exportDirectory = filepath.Join(uniDirectory, "export")
 }

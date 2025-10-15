@@ -12,6 +12,7 @@ import (
 )
 
 type Config struct {
+	FollowSymlinks bool `toml:",omitempty"`
 	Semester string
 	DateFormat string
 	Courses map[string]Course

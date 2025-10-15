@@ -10,9 +10,20 @@ import (
 	"github.com/rabuu/uni-cli/internal/exit"
 )
 
-func CwdCourseDir(uniDirectory string, config *cfg.Config) (course string, cwd string) {
+func getCwd(followSymlinks bool) (cwd string) {
 	cwd, err := os.Getwd()
 	exit.ExitWithErr(err)
+
+	if followSymlinks {
+		cwd, err = filepath.EvalSymlinks(cwd)
+		exit.ExitWithErr(err)
+	}
+
+	return
+}
+
+func CwdCourseDir(uniDirectory string, config *cfg.Config) (course string, cwd string) {
+	cwd = getCwd(config.FollowSymlinks)
 
 	if filepath.Dir(cwd) != uniDirectory {
 		exit.ExitWithMsg("You're not in a course directory.")
@@ -27,8 +38,7 @@ func CwdCourseDir(uniDirectory string, config *cfg.Config) (course string, cwd s
 }
 
 func CwdWorkingDir(uniDirectory string, config *cfg.Config) (course string, number int, cwd string) {
-	cwd, err := os.Getwd()
-	exit.ExitWithErr(err)
+	cwd = getCwd(config.FollowSymlinks)
 
 	courseDir := filepath.Dir(cwd)
 
@@ -49,7 +59,7 @@ func CwdWorkingDir(uniDirectory string, config *cfg.Config) (course string, numb
 		exit.ExitWithMsg("You're not in a working directory.")
 	}
 
-	number, err = strconv.Atoi(numberStr)
+	number, err := strconv.Atoi(numberStr)
 	if err != nil {
 		exit.ExitWithMsg("You're not in a working directory.")
 	}
@@ -58,8 +68,7 @@ func CwdWorkingDir(uniDirectory string, config *cfg.Config) (course string, numb
 }
 
 func CwdMaybeCourse(uniDirectory string, config *cfg.Config) (course string) {
-	cwd, err := os.Getwd()
-	exit.ExitWithErr(err)
+	cwd := getCwd(config.FollowSymlinks)
 
 	rest := cwd
 	for rest != "/" {
