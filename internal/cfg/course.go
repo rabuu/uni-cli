@@ -8,7 +8,7 @@ type (
 		RetrieveZip []FileMap
 		ExportFile []FileMap
 		GroupDescription string `toml:",omitempty"`
-		Members []GroupMember
+		Team []TeamMember
 		Tutor string `toml:",omitempty"`
 		Link string `toml:",omitempty"`
 		Web map[string]string
@@ -20,16 +20,16 @@ type (
 		Move bool `toml:",omitempty"`
 	}
 
-	GroupMember struct {
+	TeamMember struct {
 		First string
 		Last string
 		ID string
 	}
 )
 
-func (course Course) ListNames(sep string) (names string) {
-	length := len(course.Members)
-	for i, member := range course.Members {
+func (course Course) ListTeamNames(sep string) (names string) {
+	length := len(course.Team)
+	for i, member := range course.Team {
 		names += member.First + " " + member.Last
 		if i < length - 1 {
 			names += sep
@@ -38,9 +38,9 @@ func (course Course) ListNames(sep string) (names string) {
 	return
 }
 
-func (course Course) ListLastnames(sep string) (names string) {
-	length := len(course.Members)
-	for i, member := range course.Members {
+func (course Course) ListTeamLastnames(sep string) (names string) {
+	length := len(course.Team)
+	for i, member := range course.Team {
 		names += member.Last
 		if i < length - 1 {
 			names += sep
