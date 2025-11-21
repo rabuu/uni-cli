@@ -23,7 +23,8 @@ type (
 	TeamMember struct {
 		First string
 		Last string
-		ID string
+		ID string `toml:",omitempty"`
+		Email string `toml:",omitempty"`
 	}
 )
 
