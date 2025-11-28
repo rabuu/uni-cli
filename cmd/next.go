@@ -37,6 +37,9 @@ var nextCmd = &cobra.Command{
 		}
 
 		fmt.Printf("Success: Added working directory %s.\n", nextDir)
+
+		os.Chdir(nextDir)
+		Retrieve()
 	},
 }
 
