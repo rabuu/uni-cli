@@ -41,6 +41,7 @@ func init() {
 	rootCmd.AddCommand(retrieveCmd)
 	rootCmd.AddCommand(webCmd)
 	rootCmd.AddCommand(scriptCmd)
+	rootCmd.AddCommand(archiveCmd)
 }
 
 func validation() {
