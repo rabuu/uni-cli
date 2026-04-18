@@ -78,11 +78,16 @@ func getTemplateDirPath(course string) string {
 func applyTemplate(path string, d fs.DirEntry, err error, cwd string, nextDir string, course string, number int) error {
 	exit.ExitWithErr(err)
 
+	data := templating.Data(&config, course, number)
+
 	if d.IsDir() {
 		stripped := strings.TrimPrefix(path, filepath.Join(cwd, "template"))
 		if stripped == "" {
 			return nil
 		}
+
+		// apply templating for dir name
+		stripped = templating.GenerateString(data, stripped)
 
 		target := filepath.Join(cwd, nextDir, stripped)
 		err := os.Mkdir(target, 0755)
@@ -97,12 +102,15 @@ func applyTemplate(path string, d fs.DirEntry, err error, cwd string, nextDir st
 	exit.ExitWithErr(err)
 
 	stripped := strings.TrimPrefix(path, filepath.Join(cwd, "template"))
+
+	// apply templating for file name
+	stripped = templating.GenerateString(data, stripped)
+
 	target := filepath.Join(cwd, nextDir, stripped)
 
 	file, err := os.Create(target)
 	exit.ExitWithErr(err)
 
-	data := templating.Data(&config, course, number)
 	err = templ.Execute(file, data)
 	exit.ExitWithErr(err)
 
