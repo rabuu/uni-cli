@@ -13,7 +13,7 @@ import (
 var scriptCmd = &cobra.Command{
 	Use: "script",
 	Short: "Run global or course-local scripts",
-	Args: cobra.ExactArgs(1),
+	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		arg := args[0]
 		course := dir.CwdMaybeCourse(uniDirectory, &config)
@@ -29,7 +29,7 @@ var scriptCmd = &cobra.Command{
 			exit.ExitWithMsg("No valid script with name:", arg)
 		}
 
-		c := exec.Command(path)
+		c := exec.Command(path, args[1:]...)
 		c.Stdout = os.Stdout
 		c.Stderr = os.Stderr
 
