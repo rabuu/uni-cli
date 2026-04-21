@@ -12,6 +12,7 @@ import (
 
 var scriptCmd = &cobra.Command{
 	Use: "script",
+	Aliases: []string{"s"},
 	Short: "Run global or course-local scripts",
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
